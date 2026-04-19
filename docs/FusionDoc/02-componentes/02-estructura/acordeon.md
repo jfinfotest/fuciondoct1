@@ -41,21 +41,7 @@ Puedes usar etiquetas `<Accordion>` y `<AccordionItem>`. Por defecto, solo permi
 
 
 
-<CodeExplainer 
-  title="Explicación de sum()" 
-  code={`function sum(a, b) {
-  return a + b;
-}`}
-  steps={[
-    { line: 1, text: "Firma de la función con dos parámetros." },
-    { line: 2, text: "Retorno aritmético simple." }
-  ]}
-/>
 
-
-<Terminal title="bash">
-  npm run dev
-</Terminal>
 
 ### `<AccordionItem>`
 | Prop | Tipo | Descripción |
