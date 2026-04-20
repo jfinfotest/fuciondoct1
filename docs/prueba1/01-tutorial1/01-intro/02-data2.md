@@ -1,6 +1,9 @@
 ---
 title: 02-data2
----<CodeExplainer>
+---
+
+
+<CodeExplainer>
   ```js
   function calculateTotal(price, tax) {
     const total = price + (price * tax);
