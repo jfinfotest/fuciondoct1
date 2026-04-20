@@ -1,7 +1,7 @@
 ---
 title: "Otro"
 order: 2
-category: Comenzando
+category: 01-intro
 ---
 
 
