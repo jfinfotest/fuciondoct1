@@ -37,17 +37,18 @@ El árbol principal del código fuente está diseñado para separar limpiamente 
 
 FusionDoc permite gestionar múltiples proyectos o versiones de documentación de forma simultánea y automática.
 
-### Detección Automática
-A diferencia de sistemas tradicionales, FusionDoc no requiere una lista manual de versiones. El motor escanea el directorio raíz `docs/` en tiempo real:
-- **Cada carpeta** dentro de `docs/` se identifica como un proyecto independiente (ej. `v1`, `v2`, `mi-libreria`).
+### Detección y Visibilidad Mixta
+A diferencia de sistemas tradicionales, FusionDoc utiliza una lógica híbrida para detectar lo que debe mostrar:
+- **Escaneo de Directorios**: El motor escanea el directorio raíz `docs/` en tiempo real. Cada carpeta se identifica como un proyecto potencial (ej. `v1`, `Python`).
+- **Overrides de Base de Datos**: Si el sistema está en **Modo Gestionado** (`ENABLE_AUTH_DB=true`), el administrador puede usar el Panel de Control para ocultar carpetas del sistema de archivos sin borrarlas, o marcarlas como privadas de forma selectiva.
 - **Nombres Limpios**: El sistema limpia automáticamente prefijos numéricos (ej. `01-mi-app` -> `Mi App`) para la interfaz.
 
-### Portal de Entrada
-Cuando el sistema detecta que hay más de una carpeta en `docs/`, la raíz de la aplicación (`/`) se transforma automáticamente en un **Portal de Proyectos** (Landing Page) con tarjetas interactivas para navegar entre ellos.
+### Portal de Entrada e Inteligencia de Ruta
+Cuando el usuario llega a la raíz de la aplicación (`/`), FusionDoc toma decisiones inteligentes basadas en el contenido:
 
-### Funcionamiento Dinámico
-- **URLs por Proyecto:** Cada proyecto tiene su propio contexto de ruteo: `dominio.com/id-proyecto/topico/pagina`.
-- **Modo Subdominio:** Si se configura un subdominio (ej. `v1.midoc.com`), el sistema inyecta automáticamente el contexto del proyecto sin que aparezca en la URL.
+1. **Redirección Directa**: Si el repositorio contiene **exactamente un proyecto**, el sistema redirige automáticamente al usuario hacia esa documentación, eliminando clics innecesarios.
+2. **Grid de Selección Centrado**: Si hay múltiples proyectos, se muestra una Landing Page con un diseño **centrado horizontalmente**. Cada tarjeta presenta el icono, nombre y descripción del proyecto.
+3. **URLs por Proyecto**: Cada proyecto mantiene su propio contexto de ruteo independiente: `dominio.com/id-proyecto/topico/pagina`.
 
 ---
 
@@ -68,24 +69,29 @@ El motor core de FusionDoc (`src/lib/github.ts`) procesa estos nombres de la sig
 
 ---
 
-## 🧠 Estructura de Navegación (3 Niveles)
+## 🧠 Estructura de Navegación (3 Niveles Reales)
 
-Para garantizar una experiencia de usuario (UX) coherente, FusionDoc implementa una jerarquía estricta de 3 niveles:
+Para garantizar una experiencia de usuario (UX) coherente y escalable, FusionDoc implementa una jerarquía de 3 niveles de contenido:
 
-### Nivel 1: Tópicos (Topics)
-Son las carpetas raíz dentro de `docs/` (o dentro de la carpeta de versión activa). 
-- **Representación:** Aparecen como pestañas principales en el **Header** (barra superior).
-- **Ejemplo:** `docs/v1/01-fundamentos/`. Cada tópico agrupa grandes áreas de conocimiento.
+### Nivel 1: El Proyecto (Versión)
+Es la carpeta raíz dentro de `docs/`. 
+- **Propósito:** Separar diferentes productos o versiones (ej. `v1`, `v2`, `Alpha`).
+- **Navegación:** Aparecen en el selector de proyectos (Landing Page o Selector lateral).
 
-### Nivel 2: Categorías (Categories)
-Son subcarpetas dentro de un Tópico.
-- **Representación:** Aparecen como secciones colapsables en el **Sidebar** (barra lateral izquierda).
-- **Ejemplo:** `docs/01-fundamentos/02-organizacion/`. Permiten fragmentar un tema complejo en partes manejables.
+### Nivel 2: El Tópico (Carpeta)
+Son las carpetas situadas inmediatamente debajo del Proyecto.
+- **Propósito:** Agrupar grandes áreas de conocimiento.
+- **Navegación:** Aparecen como **pestañas principales en el Header**.
+- **Ejemplo:** `docs/v1/01-fundamentos/`. Cada carpeta en este nivel genera una sección independiente de navegación.
 
-### Nivel 3: Hojas o Páginas
-Son los archivos `.md` individuales dentro de una Categoría.
-- **Representación:** Son los enlaces finales de navegación.
-- **Ejemplo:** `docs/01-fundamentos/02-organizacion/estructura.md`.
+### Nivel 3: La Página (Archivo)
+Son los archivos `.md` o `.mdx` individuales dentro de un Tópico.
+- **Propósito:** Contener el contenido técnico final.
+- **Navegación:** Aparecen en la **barra lateral (Sidebar)**.
+- **Organización Automática:** Si agrupas archivos en subcarpetas dentro del Tópico (ej. `01-fundamentos/02-organizacion/`), el Sidebar detectará automáticamente esa estructura y creará **categorías colapsables**.
+
+> [!NOTE]
+> Esta jerarquía de 3 niveles es la base de todo el sistema de ruteo y es la que utiliza el **Omni Assistant** en el panel de administración para guiarte.
 
 ---
 

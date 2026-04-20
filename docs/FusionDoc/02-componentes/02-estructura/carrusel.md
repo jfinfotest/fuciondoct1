@@ -1,54 +1,67 @@
+# Carrusel Interactivo (Carousel)
+
+El componente `<Carousel />` es la solución ideal para presentar colecciones de contenido en un espacio optimizado. Diseñado con transiciones hardware-accelerated y un sistema de control intuitivo, permite navegar a través de imágenes, testimonios o tarjetas de características de manera fluida y elegante.
+
+## Características
+- **Transiciones Suaves**: Animaciones de deslizamiento optimizadas para una experiencia premium.
+- **Micro-Controles Inteligentes**: Indicadores de posición ("dots") y un contador numérico dinámico para contextualizar al usuario.
+- **Reproducción Inteligente**: El `autoPlay` se pausa automáticamente al interactuar, evitando interrupciones molestas.
+- **Contenido Agnóstico**: Aunque brilla con imágenes, puede encapsular cualquier componente MDX complejo.
+
 ---
-title: Carrusel
-description: Slider interactivo para mostrar imágenes, testimonios o cualquier contenido en una secuencia deslizable.
-icon: 'lucide:images'
-order: 6
----
 
-# Carrusel
+## Diseños de Alto Nivel
 
-El componente `<Carousel />` permite presentar múltiples elementos en un espacio reducido mediante una navegación horizontal suave. Soporta reproducción automática (autoplay) y controles manuales.
+### 1. Galería de Marca (Cinemático)
+Utiliza la reproducción automática para crear una vitrina visual de alto impacto.
 
-## Uso Básico
+<Carousel autoPlay={true} interval={4000}>
+  <img src="https://images.unsplash.com/photo-1451187580459-43490279c0fa?q=80&w=2072&auto=format&fit=crop" alt="Espacio profundo" />
+  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop" alt="Código neon" />
+  <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=2072&auto=format&fit=crop" alt="Setup desarrollador" />
+</Carousel>
 
-Simplemente envuelve tus elementos (preferiblemente imágenes) dentro del componente.
+### 2. Tour de Funcionalidades (Nesting)
+Demuestra la potencia de FusionDoc anidando otros componentes dentro del carrusel.
 
-```jsx
 <Carousel>
-  <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=2072" alt="Web Dev" />
-  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=2069" alt="Coding" />
-  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070" alt="Terminal" />
+  <div className="p-12 text-center flex flex-col items-center">
+    <Alert variant="success" title="Motor de MDX 16" className="max-w-md">
+      Renderizado ultra rápido compatible con las últimas APIs de React Server Components.
+    </Alert>
+  </div>
+  <div className="p-12 text-center flex flex-col items-center">
+    <Alert variant="info" title="Diseño Glassmorphism" className="max-w-md">
+      Efectos de transparencia de última generación integrados nativamente.
+    </Alert>
+  </div>
 </Carousel>
-```
 
-<Carousel>
-  <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80&w=2072" alt="Web Dev" />
-  <img src="https://images.unsplash.com/photo-1461749280684-dccba630e2f6?auto=format&fit=crop&q=80&w=2069" alt="Coding" />
-  <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&q=80&w=2070" alt="Terminal" />
+### 3. Sistema de Testimonios
+Crea una sección de "Social Proof" elegante y dinámica.
+
+<Carousel autoPlay={true} interval={6000}>
+  <div className="p-10 text-center">
+    <p className="text-2xl font-serif italic mb-6">"FusionDoc ha transformado por completo cómo nuestro equipo de ingeniería comparte conocimientos. La estética es imbatible."</p>
+    <div className="font-bold uppercase tracking-widest text-primary">Elena Rodriguez — CTO en TechFlow</div>
+  </div>
+  <div className="p-10 text-center">
+    <p className="text-2xl font-serif italic mb-6">"Los componentes interactivos como X6 y Mafs nos permiten documentar lógica compleja con una claridad nunca vista."</p>
+    <div className="font-bold uppercase tracking-widest text-primary">Marco Antonio — Senior Architect</div>
+  </div>
 </Carousel>
 
 ---
 
-## Reproducción Automática
+## Referencia de API
 
-Puedes habilitar la transición automática con la propiedad `autoPlay`.
-
-```jsx
-<Carousel autoPlay={true} interval={3000}>
-  <img src="..." />
-  <img src="..." />
-</Carousel>
-```
-
----
-
-## Propiedades
+### `<Carousel />`
 
 | Propiedad | Tipo | Defecto | Descripción |
 | :--- | :--- | :--- | :--- |
-| `children` | `ReactNode` | **Requerido** | Elementos a mostrar en el carrusel. |
-| `autoPlay` | `boolean` | `false` | Activa la transición automática entre elementos. |
-| `interval` | `number` | `5000` | Tiempo en milisegundos entre cada cambio automático. |
+| `children` | `ReactNode` | **Sí** | Conjunto de elementos a deslizar. |
+| `autoPlay` | `boolean` | `false` | Activa la reproducción automática. |
+| `interval` | `number` | `5000` | Milisegundos entre cada slide en modo automático. |
 
-> [!NOTE]
-> El carrusel pausa la reproducción automática cuando el usuario pasa el ratón sobre el componente, permitiendo una visualización cómoda.
+> [!TIP]
+> Asegúrate de que las imágenes tengan proporciones similares para mantener la consistencia visual del carrusel. Todas las imágenes dentro del componente se ajustan automáticamente al 100% del ancho disponible.

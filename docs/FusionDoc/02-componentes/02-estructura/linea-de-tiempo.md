@@ -1,68 +1,96 @@
+# Línea de Tiempo (Timeline)
+
+El componente `<Timeline />` es una herramienta esencial para narrar la evolución de un proyecto, documentar cambios técnicos o planificar hitos futuros. Con un diseño minimalista de "línea lateral", permite una lectura vertical fluida que prioriza la jerarquía visual y la claridad temporal.
+
+## Características
+- **Variantes Semánticas**: Usa colores predefinidos (`success`, `info`, `warning`, `active`) para comunicar estados sin palabras adicionales.
+- **Micro-interacciones**: Efectos de entrada suaves y animaciones de "pulso" para los hitos activos.
+- **Flexibilidad de Contenido**: Cada hito puede contener texto simple, código, imágenes o alertas.
+- **Diseño Responsivo**: La línea lateral se ajusta automáticamente, manteniendo la legibilidad en dispositivos móviles.
+
 ---
-title: Línea de Tiempo
-description: Visualiza eventos, hitos o mapas de ruta de manera cronológica.
-icon: 'lucide:git-pull-request'
-order: 9
----
 
-# Línea de Tiempo
+## Diseños de Alto Nivel
 
-El componente `<Timeline />` es perfecto para mostrar el historial de un proyecto, registros de cambios (changelogs) o planes futuros de una manera estructurada y visual.
-
-## Ejemplo de Mapa de Ruta
-
-Combina diferentes variantes para indicar el estado de cada hito.
+### 1. Changelog de Producto (Técnico)
+Documenta las versiones de tu software resaltando nuevas características, mejoras y correcciones críticas.
 
 <Timeline>
   <TimelineItem 
-    title="Lanzamiento Versión 1.0" 
-    date="Enero 2026" 
+    title="Versión 2.5.0 - Estabilidad Total" 
+    date="15 Abr 2024" 
     variant="success"
   >
-    Lanzamiento oficial de FusionDoc con soporte completo para MDX y temas dinámicos.
+    Implementación del nuevo motor de búsqueda semántica y optimización del tiempo de build en un 40%.
+    <Alert variant="info">Se recomienda actualizar para obtener las últimas parches de seguridad.</Alert>
   </TimelineItem>
   
   <TimelineItem 
-    title="Beta de Componentes IA" 
-    date="Marzo 2026" 
+    title="Mejora en el Editor Administrativo" 
+    date="2 Abr 2024" 
+    variant="info"
+  >
+    Añadidos nuevos atajos de teclado para inserción rápida de componentes MDX.
+  </TimelineItem>
+  
+  <TimelineItem 
+    title="Corrección: Fuga de Memoria" 
+    date="28 Mar 2024" 
+    variant="warning"
+  >
+    Solucionado un problema en el componente `X6Diagram` que causaba lentitud al renderizar más de 50 nodos.
+  </TimelineItem>
+</Timeline>
+
+### 2. Roadmap Estratégico (Hitos Vivos)
+Muestra a tu comunidad en qué estás trabajando ahora mismo utilizando la variante `active`.
+
+<Timeline>
+  <TimelineItem 
+    title="Motor de IA Integrado" 
+    date="En Desarrollo" 
     variant="active"
   >
-    Integración experimental con modelos de lenguaje para generación automática de documentación.
+    Estamos entrenando un modelo específico para que FusionDoc pueda autogenerar documentación desde comentarios de código.
   </TimelineItem>
   
   <TimelineItem 
-    title="Soporte para Plugins Externos" 
-    date="Julio 2026" 
+    title="Colaboración en Tiempo Real" 
+    date="Q3 2024" 
     variant="default"
   >
-    Permitir que la comunidad cree sus propios componentes y extensiones para el sistema.
+    Edición simultánea para equipos grandes, similar a Google Docs pero para ingeniería de software.
   </TimelineItem>
 </Timeline>
 
-## Uso en MDX
+### 3. Carrera de Aprendizaje (Educativo)
+Guía a tus colaboradores a través de un camino predefinido de conocimientos.
 
-Envuelve elementos `<TimelineItem />` dentro de un contenedor `<Timeline />`.
-
-````mdx
 <Timeline>
-  <TimelineItem title="Paso 1" date="2024" variant="success">
-    Contenido del paso 1.
+  <TimelineItem title="Fundamentos de MDX" date="Semana 1" variant="success">
+    Aprende la sintaxis básica y cómo FusionDoc extiende Markdown.
   </TimelineItem>
-  <TimelineItem title="Paso 2" date="En progreso" variant="active">
-    Contenido del paso 2.
+  <TimelineItem title="Arquitectura de Componentes" date="Semana 2" variant="active">
+    Cómo crear, registrar y utilizar componentes personalizados en el sistema.
   </TimelineItem>
 </Timeline>
-````
 
-## Propiedades
+---
 
-### `<TimelineItem>`
+## Referencia de API
 
-| Prop | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `title` | `string` | **Requerido**. Título del hito. |
-| `date` | `string` | Fecha o periodo de tiempo (aparece a la derecha). |
-| `variant` | `string` | Estilo visual: `default`, `success`, `warning`, `info`, `active`. |
+### `<Timeline />`
+El contenedor que dibuja la línea vertical.
 
-> [!TIP]
-> La variante `active` incluye una pequeña animación de pulso, lo que la hace ideal para señalar hitos en los que se está trabajando actualmente.
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | - | Lista de componentes `<TimelineItem />`. |
+
+### `<TimelineItem />`
+
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | **Sí** | Título principal del hito. |
+| `date` | `string` | - | Texto temporal (aparece como un badge elegante). |
+| `variant` | `default` \| `success` \| `warning` \| `info` \| `active` | `default` | Define el color del indicador. `active` incluye animación de pulso. |
+| `children` | `ReactNode` | - | Contenido detallado del hito. |

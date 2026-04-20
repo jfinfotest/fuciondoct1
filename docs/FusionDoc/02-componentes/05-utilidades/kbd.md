@@ -1,38 +1,31 @@
+# Teclas (Kbd)
+
+El componente `<Kbd />` (Keyboard) se utiliza para representar una tecla física o una combinación de atajos de teclado. A diferencia del código estándar, este componente tiene una estética que imita el hardware real (estilo Apple/Moderno), lo que facilita la lectura de guías de software.
+
+## Características
+- **Estética Hardware**: Sombras y bordes que dan profundidad a la tecla.
+- **Tipografía Mono**: Utiliza una fuente monoespaciada en negrita para máxima claridad.
+- **Inline**: Se integra perfectamente dentro de párrafos de texto.
+
+## Ejemplos de Uso
+
+### Tecla Individual
+Para realizar esta acción, presiona la tecla <Kbd>Enter</Kbd>.
+
+### Combinaciones (Atajos)
+Puedes guardar los cambios presionando <Kbd>Ctrl</Kbd> + <Kbd>S</Kbd>.
+
+Para abrir el buscador global, utiliza <Kbd>⌘</Kbd> + <Kbd>K</Kbd> en tu Mac.
+
+## Referencia de Props
+
+| Prop | Tipo | Descripción |
+| :--- | :--- | :--- |
+| `children` | `ReactNode` | **Requerido**. El texto o icono que representa la tecla. |
+| `className` | `string` | Clases de CSS adicionales para personalización. |
+
 ---
-title: Keyboard Shortcuts (Kbd)
-description: Representación visual elegante de teclas del teclado para atajos y comandos.
-icon: 'lucide:keyboard'
----
 
-# Keyboard Shortcuts (Kbd)
-
-El componente `<Kbd />` se utiliza para indicar teclas del teclado en tu documentación. Tiene un diseño 3D sutil para que parezcan teclas reales.
-
-## Uso Básico
-
-```jsx
-<p>
-  Para buscar, presiona <Kbd>Ctrl</Kbd> + <Kbd>K</Kbd> en Windows 
-  o <Kbd>⌘</Kbd> + <Kbd>K</Kbd> en macOS.
-</p>
-```
-
-## Propiedades
-
-| Propiedad | Tipo | Defecto | Descripción |
-| :--- | :--- | :--- | :--- |
-| `children` | `React.ReactNode` | **Requerido** | El texto o símbolo que representa la tecla. |
-| `className` | `string` | - | Clases CSS adicionales. |
-
-## Ejemplo Dinámico
-
-*   Guardar cambios: <Kbd>Ctrl</Kbd> + <Kbd>S</Kbd>
-*   Nuevo archivo: <Kbd>Alt</Kbd> + <Kbd>N</Kbd>
-*   Cerrar ventana: <Kbd>Esc</Kbd>
-*   Buscar en proyecto: <Kbd>Ctrl</Kbd> + <Kbd>Shift</Kbd> + <Kbd>F</Kbd>
-
-## Combinaciones Especiales
-
-Formatear código: <Kbd>Shift</Kbd> + <Kbd>Alt</Kbd> + <Kbd>F</Kbd>
-
-Paleta de comandos: <Kbd>Ctrl</Kbd> + <Kbd>P</Kbd>
+<Alert variant="info">
+  **Accesibilidad:** Este componente utiliza la etiqueta semántica `<kbd>`, lo que permite que los lectores de pantalla identifiquen correctamente el texto como una entrada de teclado.
+</Alert>

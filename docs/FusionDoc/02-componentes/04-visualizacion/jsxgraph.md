@@ -1,69 +1,67 @@
----
-title: Gráficos Matemáticos (JSXGraph)
-description: Visualiza y manipula gráficos interactivos, diagramas geométricos y funciones matemáticas complejas mediante JSXGraph.
-icon: 'lucide:line-chart'
-order: 25
----
+# Geometría Dinámica (JSXGraph)
 
-# Funciones y Gráficos con JSXGraph
+El componente `<JSXGraphBoard />` integra el motor **JSXGraph** para crear construcciones geométricas interactivas, visualizaciones de cálculo y simulaciones físicas de alta precisión. A diferencia de las gráficas estáticas, JSXGraph permite definir restricciones geométricas (ej: "este punto siempre debe estar sobre este círculo") que se mantienen durante la interacción del usuario.
 
-FusionDoc-Next proporciona soporte completo para **JSXGraph**, permitiéndote incrustar gráficos matemáticos dinámicos y totalmente interactivos.
-
-El componente se maneja a través de `<JSXGraphBoard />` o usando los atajos `JSXGraph` y `jsxgraph`.
+## Características
+- **Geometría de Restricciones**: Permite crear puntos, líneas y curvas que dependen unos de otros de forma dinámica.
+- **Interactividad Precisa**: Los usuarios pueden arrastrar elementos, usar deslizadores y observar cómo el sistema de ecuaciones se resuelve en tiempo real.
+- **Inyección de Código Directa**: El prop `code` permite escribir scripts imperativos en JavaScript con acceso total al motor `JXG` y al objeto `board`.
+- **Diseño Integrado**: Barra de herramientas superior estilo "Workbench" y soporte para temas claro/oscuro integrados.
 
 ---
 
-## 📈 Parábolas y Puntos Interactivos
+## Diseños de Alto Nivel
 
-Crea funciones, puntos deslizables e intersecciones matemáticas fácilmente. Puedes inyectar el código que interactuará con el tablero a través de la propiedad `code`. Internamente, dispones de la variable `board` para dibujar.
+### 1. Geometría y Restricciones (Triángulo)
+Demuestra cómo los puntos pueden estar vinculados para formar figuras geométricas persistentes.
 
 <JSXGraphBoard 
-  title="Mi primera gráfica JSXGraph" 
-  code="var p1 = board.create('point', [-2, -2], {name: 'A', size: 4, face: 'o', color: '#10b981'}); var p2 = board.create('point', [0, 1], {name: 'B', size: 4, face: 'o', color: '#3b82f6'}); var p3 = board.create('point', [2, -2], {name: 'C', size: 4, face: 'o', color: '#f59e0b'}); board.create('conic', [p1, p2, p3, p1, p3], {strokeColor: '#ef4444', strokeWidth: 3});"
+  title="Laboratorio de Geometría" 
+  code="var p1 = board.create('point', [-2, -2], {name: 'A', color: '#10b981'}); 
+var p2 = board.create('point', [0, 2], {name: 'B', color: '#3b82f6'}); 
+var p3 = board.create('point', [2, -2], {name: 'C', color: '#f59e0b'}); 
+var poly = board.create('polygon', [p1, p2, p3], {fillColor: 'rgba(59, 130, 246, 0.1)', strokeColor: '#3b82f6'});"
 />
 
-```mdx
-<JSXGraphBoard 
-  title="Mi primera gráfica JSXGraph" 
-  code="var p1 = board.create('point', [-2, -2], {name: 'A', size: 4, face: 'o', color: '#10b981'}); var p2 = board.create('point', [0, 1], {name: 'B', size: 4, face: 'o', color: '#3b82f6'}); var p3 = board.create('point', [2, -2], {name: 'C', size: 4, face: 'o', color: '#f59e0b'}); board.create('conic', [p1, p2, p3, p1, p3], {strokeColor: '#ef4444', strokeWidth: 3});"
-/>
-```
-
----
-
-## 📏 Deslizadores y Funciones de Onda
-
-También puedes crear ondas cuya frecuencia cambia en función del valor de deslizadores interactivos.
+### 2. Cinemática con Deslizadores
+Usa controles interactivos para modificar la frecuencia de una onda senoidal en tiempo real.
 
 <JSXGraphBoard 
-  title="Senoides Interactivas" 
+  title="Simulador de Ondas" 
   height={350}
-  code="var s = board.create('slider', [[-4, -3], [3, -3], [1, 5, 10]], {name: 'frecuencia', snapWidth: 0.1}); board.create('functiongraph', [function(x) { return Math.sin(s.Value() * x); }], {strokeColor: '#8b5cf6', strokeWidth: 3, dash: 2});"
+  code="var s = board.create('slider', [[-4, -3.5], [2, -3.5], [1, 5, 10]], {name: 'frecuencia'}); 
+board.create('functiongraph', [function(x) { return Math.sin(s.Value() * x); }], {strokeColor: '#8b5cf6', strokeWidth: 3});"
 />
 
-```mdx
+### 3. Cálculo Diferencial (Tangentes)
+Visualiza la derivada de una función mediante una línea tangente que sigue al cursor.
+
 <JSXGraphBoard 
-  title="Senoides Interactivas" 
-  height={350}
-  code="var s = board.create('slider', [[-4, -3], [3, -3], [1, 5, 10]], {name: 'frecuencia', snapWidth: 0.1}); board.create('functiongraph', [function(x) { return Math.sin(s.Value() * x); }], {strokeColor: '#8b5cf6', strokeWidth: 3, dash: 2});"
+  title="Estudio de la Derivada" 
+  code="var f = board.create('functiongraph', [function(x){ return 0.2*x*x*x - x; }], {strokeWidth:2});
+var p = board.create('glider', [1, 1, f], {name: 'P', color: '#ef4444'});
+var t = board.create('tangent', [p], {strokeColor: '#ef4444', dash: 2});"
 />
-```
 
 ---
 
-## ⚙️ Propiedades
+## Referencia de API
 
-El componente `<JSXGraphBoard>` admite las siguientes opciones:
+### `<JSXGraphBoard />`
 
-| Propiedad | Tipo | Por Defecto | Descripción |
+| Propiedad | Tipo | Defecto | Descripción |
 | :--- | :--- | :--- | :--- |
-| `title` | `string` | `"JSXGraph Interactive Board"` | El título superior de la barra de la gráfica. |
-| `code` | `string` | `""` | El código en JavaScript nativo usado para construir la geometría dentro del tablero. |
-| `height` | `number \| string` | `400` | Altura del área del mapa/rejilla principal. |
-| `width` | `number \| string` | `"100%"` | Anchura del área principal (`%` o `px`). |
-| `boardId` | `string` | Aleatorio | Útil si deseas proporcionar manualmente un ID al contenedor del tablero. |
-| `attributes` | `object` | `{ boundingbox: ... }` | Atributos subyacentes pasados a `JXG.JSXGraph.initBoard`. Interfiere directamente en la malla original. |
+| `code` | `string` | **Sí** | Script en JavaScript que construye la geometría. Tienes acceso a `board` y `JXG`. |
+| `height` | `number \| string` | `400` | Altura del lienzo (soporta `px` o `vh`). |
+| `title` | `string` | `"JSXGraph Board"` | Título descriptivo en la barra superior del componente. |
+| `attributes` | `object` | - | Configuración base del tablero (boundingbox, axis, grid). |
+
+---
+
+## Mejores Prácticas
+- **Limpieza de IDs**: Si usas múltiples tableros en una misma página, el sistema genera IDs únicos automáticamente, pero puedes usar `boardId` para control manual.
+- **Variables Globales**: Evita declarar variables con `window.` dentro del prop `code`. Usa `var`, `let` o `const` normalmente; el script se ejecuta en un contexto aislado.
+- **Legibilidad**: Para scripts largos, usa plantillas de string con backticks (`` ` ``) en tu archivo MDX para mantener los saltos de línea legibles.
 
 > [!TIP]
-> **Acceso Interno:** Dentro de la propiedad `code` tienes inyectadas dos variables directamente desde la ejecución en tiempo real:
-> `board` (tu tabla configurada) y `JXG` (para acceder a constructores de la librería nativa).
+> Puedes usar `board.on('move', function(){ ... })` dentro de tu código para disparar eventos personalizados de FusionDoc cuando el usuario interactúe con la geometría.

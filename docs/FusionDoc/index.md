@@ -6,23 +6,34 @@ icon: mdi:home
 
 # Bienvenido a FusionDoc
 
-Esta es la página de inicio de tu documentación. Desde aquí puedes navegar por todas las secciones disponibles usando el menú lateral dinámico y la búsqueda instantánea (motor Orama).
+Esta es la página de inicio de tu documentación. Desde aquí puedes navegar por todas las secciones disponibles usando el menú lateral dinámico y el potente motor de búsqueda Orama.
 
-La arquitectura actual de **FusionDoc** utiliza [Next.js 16](https://nextjs.org/) con el App Router, lo que permite aprovechar perfiles de **Exportación Estática Completa (SSG)** para alojarse gratuitamente en infraestructuras como *GitHub Pages*.
+La arquitectura de **FusionDoc** utiliza [Next.js 16](https://nextjs.org/) con el App Router, lo que permite aprovechar perfiles de **Exportación Estática Completa (SSG)** o un **Modo Gestionado** con base de datos y autenticación según tus necesidades.
+
+## ✨ Características Clave
+
+- **Modo Público (Zero-DB)**: Despliega un portal abierto sin dependencias de base de datos ni login.
+- **Modo Gestionado**: Protege tus documentos con **Better-Auth**, Grupos de Usuario y Panel de Control.
+- **Administración Dinámica**: Organiza tus contenidos con **Drag & Drop** y utiliza el **Omni Assistant** como guía técnica integral.
+- **Visualización Avanzada**: Biblioteca integrada de componentes interactivos con **Mafs, KaTeX, P5.js y Diagramas X6**.
 
 ## Secciones Principales
 
 ### 🚀 Fundamentos
-Aprende los conceptos básicos y cómo instalar FusionDoc o configurar despliegue y variables locales.
-[Ir a Introducción](/01-fundamentos/introduccion)
+Aprende los conceptos básicos, cómo configurar el `ENABLE_AUTH_DB` y cómo organizar tus carpetas en 3 niveles.
+[Ir a Arquitectura y Estructura](./01-fundamentos/02-organizacion/estructura)
+
+### ⚙️ Administración
+Domina el Dashboard, el sistema de Drag & Drop y el uso del Omni Assistant.
+[Guía de Administración](./04-administracion)
 
 ### 🧱 Componentes y Matemáticas 
-Explora nuestra exclusiva biblioteca de componentes interactivos, visualizaciones geométricas usando **Mafs & KaTeX** y simulaciones de lienzos generativos con **P5.js**.
-[Ver Visualizaciones Interactivos](/02-componentes/04-visualizacion/mafs-katex)
+Explora nuestra exclusiva biblioteca de componentes interactivos y visualizaciones técnicas.
+[Ver Visualizaciones](./02-componentes/04-visualizacion/mafs-katex)
 
 ## Empezando
 
-Si eres nuevo, te recomendamos seguir nuestro [Tutorial Paso a Paso](/03-tutorial/crear-proyecto) para configurar tu primer sitio de documentación. Si prefieres saltar directo al despliegue, explora cómo generamos rutas estáticas con [despliegue estático SSG](/01-fundamentos/03-configuracion/despliegue-estatico).
+Si eres nuevo, te recomendamos seguir nuestro [Tutorial de Despliegue](/03-tutorial/distribucion-despliegue) para configurar tu sitio con Docker o Vercel. Si prefieres un portal abierto al mundo, configura el modo público en las [Variables de Entorno](/01-fundamentos/03-configuracion/variables-de-entorno).
 
 ---
 

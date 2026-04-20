@@ -1,80 +1,106 @@
+# Mapa de Ruta (Roadmap)
+
+El componente `<Roadmap />` es la herramienta definitiva para gestionar las expectativas de los usuarios y stakeholders. Permite visualizar la evolución cronológica y el estado de desarrollo de un proyecto a través de una línea de tiempo elegante, animada e interactiva.
+
+## Características
+- **Estados Semánticos**: Identificación inmediata mediante colores y iconos específicos para estados `released`, `beta`, `in-progress` y `planned`.
+- **Línea de Vida Infinita**: Los conectores se generan automáticamente entre hitos, creando un flujo visual continuo.
+- **Micro-interacciones**: Animaciones de entrada suave (`whileInView`) y efectos de hover que iluminan la tarjeta y escalan los iconos.
+- **Información Temporal**: Espacios optimizados para fechas o períodos, facilitando la planificación a largo plazo.
+
 ---
-title: Interactive Roadmap
-description: Muestra el progreso del producto con una línea de tiempo interactiva y estados de desarrollo.
-icon: 'lucide:map'
----
 
-# Interactive Roadmap
+## Diseños de Alto Nivel
 
-El componente `<Roadmap />` es una herramienta visual premium para comunicar el estado de desarrollo de funcionalidades o versiones de tu proyecto.
+### 1. Visión Estratégica de Producto
+Divide tu proyecto en grandes fases de desarrollo para comunicar el futuro del ecosistema.
 
-## Uso Básico
-
-Define una lista de hitos dentro del contenedor `Roadmap`.
-
-```jsx
 <Roadmap>
   <RoadmapItem 
-    title="Versión 1.0 Lanzada" 
+    title="Fase 1: Motor del Núcleo" 
     status="released" 
-    date="Enero 2024" 
-    description="Lanzamiento oficial de FusionDoc con soporte para MDX y temas personalizados."
+    date="Finalizado - Q4 2023" 
+    description="Implementación de Next.js 16, MDX Engine y sistema de temas dinámico. Estabilización de la arquitectura base."
   />
   <RoadmapItem 
-    title="Nuevos Componentes Premium" 
+    title="Fase 2: IA Colaborativa" 
+    status="in-progress" 
+    date="En curso - Enero 2024" 
+    description="Integración de LLMs para autocompletado en el editor administrativo y asistente de búsqueda inteligente para usuarios finales."
+  />
+  <RoadmapItem 
+    title="Fase 3: Ecosistema de Plugins" 
     status="beta" 
-    date="En curso" 
-    description="Integración de mapas interactivos y gráficos avanzados."
+    date="Beta Cerrada - Marzo 2024" 
+    description="Portal para desarrolladores, Marketplace de componentes y soporte para extensiones de terceros."
   />
   <RoadmapItem 
-    title="IA Documentación" 
+    title="Fase 4: Despliegue Multi-Cloud" 
     status="planned" 
-    description="Asistente de IA para responder preguntas sobre la documentación."
+    date="Estimado - Q3 2024" 
+    description="Sincronización automática con AWS, GCP y Azure mediante webhooks nativos."
     isLast={true}
   />
 </Roadmap>
-```
 
-## Estados de RoadmapItem
+### 2. Historial de Lanzamientos (Changelog)
+Utiliza el roadmap para documentar versiones específicas y sus cambios más importantes.
 
-Cada hito puede tener uno de los siguientes estados, los cuales cambian el color y el icono automáticamente:
+<Roadmap>
+  <RoadmapItem 
+    title="Versión 2.1.0" 
+    status="released" 
+    date="15 de Abril, 2024" 
+    description="Mejora crítica en el rendimiento del sidebar y nuevo componente de visualización de algoritmos."
+  />
+  <RoadmapItem 
+    title="Versión 2.0.5" 
+    status="released" 
+    date="2 de Abril, 2024" 
+    description="Corrección de errores en el editor Monaco y soporte mejorado para Safari móvil."
+    isLast={true}
+  />
+</Roadmap>
 
-| Estado | Icono | Color | Significado |
-| :--- | :--- | :--- | :--- |
-| `released` | Rocket | Verde | Funcionalidad ya disponible. |
-| `beta` | Star | Púrpura | En fase de pruebas abierta. |
-| `in-progress` | Circle | Azul | En desarrollo activo. |
-| `planned` | Clock | Gris | Planificado para el futuro. |
+### 3. Ruta de Aprendizaje para Desarrolladores
+Guía a tus colaboradores a través de los pasos necesarios para dominar FusionDoc.
 
-## Propiedades de RoadmapItem
+<Roadmap>
+  <RoadmapItem 
+    title="1. Fundamentos de MDX" 
+    status="released" 
+    description="Aprende a combinar Markdown con componentes React. Etiquetas, props y componentes personalizados."
+  />
+  <RoadmapItem 
+    title="2. Arquitectura de FusionDoc" 
+    status="in-progress" 
+    description="Entiende cómo se gestionan los archivos físicos y cómo funciona el sistema de caché dinámico."
+  />
+  <RoadmapItem 
+    title="3. Creación de Componentes Propios" 
+    status="planned" 
+    description="Taller avanzado sobre cómo registrar tus propios componentes en el registro MDX."
+    isLast={true}
+  />
+</Roadmap>
+
+---
+
+## Referencia de API
+
+### `<Roadmap />`
+El contenedor principal que agrupa los hitos.
 
 | Propiedad | Tipo | Defecto | Descripción |
 | :--- | :--- | :--- | :--- |
-| `title` | `string` | **Requerido** | Título del hito. |
-| `status` | `'released' \| 'beta' \| 'in-progress' \| 'planned'` | **Requerido** | Estado visual del hito. |
-| `description` | `string` | - | Descripción del hito. |
-| `date` | `string` | - | Fecha o período estimado. |
-| `isLast` | `boolean` | `false` | Oculta la línea conectora bajo el último elemento. |
+| `children` | `ReactNode` | - | Lista de componentes `<RoadmapItem />`. |
 
-## Ejemplo Dinámico
+### `<RoadmapItem />`
 
-<Roadmap>
-  <RoadmapItem 
-    title="Fase de Estabilización" 
-    status="released" 
-    date="Hace 2 semanas" 
-    description="Limpieza de código base y optimización del motor de búsqueda interno."
-  />
-  <RoadmapItem 
-    title="Nuevos Componentes Visuales" 
-    status="in-progress" 
-    date="Fecha estimada: Mayo 2024" 
-    description="Estamos trabajando en el FeatureGlow y el Roadmap que estás viendo ahora mismo."
-  />
-  <RoadmapItem 
-    title="Exploración de Plugins Externos" 
-    status="planned" 
-    description="Apertura de la API para que la comunidad pueda crear sus propios componentes de documentación."
-    isLast={true}
-  />
-</Roadmap>
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | **Sí** | Título descriptivo del hito. |
+| `status` | `released` \| `beta` \| `in-progress` \| `planned` | **Sí** | El estado de desarrollo que define el color e icono. |
+| `description` | `string` | - | Detalles adicionales sobre el hito. |
+| `date` | `string` | - | Fecha, versión o período estimado. |
+| `isLast` | `boolean` | `false` | Si es `true`, no dibuja la línea hacia abajo. |

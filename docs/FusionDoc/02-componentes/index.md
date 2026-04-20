@@ -58,6 +58,14 @@ Componentes para mostrar assets y estructuras.
 - **[Media](./04-visualizacion/multimedia)**: Soporte para Video y Audio.
 - **[Zoom Image](./04-visualizacion/imagen-zoom)**: Imágenes interactivas a pantalla completa.
 
+## 🧬 Científico y Visualización Avanzada
+Herramientas matemáticas y de visualización técnica pesada.
+- **[Mafs & KaTeX](./04-visualizacion/mafs-katex)**: Funciones matemáticas y fórmulas LaTeX de alta fidelidad.
+- **[JSXGraph](./04-visualizacion/jsxgraph)**: Geometría euclidiana interactiva y trazado dinámico.
+- **[P5 Interactivo](./04-visualizacion/p5-interactivo)**: Sketches de Processing en tiempo real.
+- **[Diagramas X6](./04-visualizacion/diagramas-x6)**: Visualización de grafos y diagramas de flujo interactivos.
+- **[Algo Visualizer](./04-visualizacion/visualizador-algoritmos)**: Simulaciones de algoritmos y estructuras de datos.
+
 ## 🛠️ Utilidades
 Componentes pequeños para mejorar el detalle y la navegación.
 - **[Alertas](./05-utilidades/alertas)**: Notas, advertencias y consejos.

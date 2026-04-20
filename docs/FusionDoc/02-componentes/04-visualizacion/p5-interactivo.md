@@ -1,47 +1,21 @@
----
-title: Visualizaciones Interactivas (p5.js)
-description: Algoritmos animados paso a paso y sketches p5.js creativos directamente en tu documentación.
-icon: 'lucide:cpu'
-order: 20
----
+# Arte Generativo y Simulaciones (p5.js)
 
-# Visualizaciones Interactivas con p5.js
+El componente `<P5Sketch />` integra la librería **p5.js** para permitir la creación de sketches creativos, simulaciones físicas y arte generativo directamente en tu documentación. Proporciona un entorno de ejecución global donde puedes escribir código estilo Processing sin preocuparte por la configuración del DOM.
 
-FusionDoc incluye dos componentes de visualización interactiva: **AlgoVisualizer** para algoritmos y **P5Sketch** para sketches p5.js libres.
-
----
-
-## 🧮 AlgoVisualizer — Algoritmos Animados
-
-<AlgoVisualizer algo="bubble-sort" data="[8, 3, 5, 1, 9, 2, 7, 4, 6]" speed={1.5} />
-
-```mdx
-<AlgoVisualizer algo="bubble-sort" data="[8, 3, 5, 1, 9, 2, 7, 4, 6]" speed={1.5} />
-```
+## Características
+- **Sintaxis Global**: Usa funciones estándar como `setup()`, `draw()`, `mouseX`, `dist()`, etc.
+- **Interactividad Nativa**: Soporta eventos de ratón, teclado y gestos táctiles out-of-the-box.
+- **Modo Pantalla Completa**: Botón integrado para disfrutar de las visualizaciones en todo el viewport.
+- **Aislamiento de Entorno**: Cada sketch se ejecuta en su propia instancia, evitando conflictos entre múltiples visualizaciones en la misma página.
 
 ---
 
-<AlgoVisualizer algo="quick-sort" data="[7, 2, 10, 4, 1, 8, 3, 6, 9, 5]" speed={1} />
+## Diseños de Alto Nivel
 
-<AlgoVisualizer algo="binary-search" data="[3, 7, 12, 18, 24, 31, 45, 52, 67, 80]" target={31} />
+### 1. Dinámica de Partículas
+Interactúa con el lienzo para generar partículas que reaccionan a la posición del cursor.
 
-### ⚙️ Propiedades
-
-| Propiedad | Tipo | Por Defecto | Descripción |
-| :--- | :--- | :--- | :--- |
-| `algo` | `string` | `bubble-sort` | Algoritmo: `bubble-sort` · `insertion-sort` · `selection-sort` · `quick-sort` · `binary-search` |
-| `data` | `string \| number[]` | `[8,3,5,…]` | Array de números. |
-| `target` | `number` | — | Número a buscar (solo para `binary-search`). |
-| `speed` | `number` | `1` | Multiplicador de velocidad (ej. `1.5`, `2`). |
-| `height` | `number` | `300` | Altura en píxeles del área de barras. |
-
----
-
-## 🎨 P5Sketch — Sketches Creativos
-
-Usa un bloque de código con lenguaje **`p5`** para incrustar cualquier sketch de p5.js. El código se escribe en estilo global (`setup`, `draw`, `mouseX`...) sin prefijos.
-
-```p5 Partículas interactivas
+<P5Sketch height={360} title="Efecto de Proximidad" code="
 function setup() {
   createCanvas(600, 360);
   background(10, 10, 20);
@@ -61,9 +35,12 @@ function draw() {
     circle(x, y, random(2, 8));
   }
 }
-```
+" />
 
-```p5 Onda de Lissajous
+### 2. Síntesis Geométrica (Lissajous)
+Demostración de curvas armónicas generadas mediante funciones trigonométricas.
+
+<P5Sketch height={320} title="Curvas de Lissajous" code="
 let t = 0;
 function setup() {
   createCanvas(600, 320);
@@ -84,29 +61,77 @@ function draw() {
   endShape();
   t += 0.008;
 }
-```
+" />
 
-### Cómo escribir un sketch
+### 3. Sistemas Recursivos (Árbol Fractal)
+Visualización de estructuras naturales mediante recursividad simple.
+
+<P5Sketch height={350} title="Crecimiento Fractal" code="
+function setup() {
+  createCanvas(600, 350);
+}
+
+function draw() {
+  background(15);
+  stroke(222);
+  translate(width/2, height);
+  branch(80);
+}
+
+function branch(len) {
+  line(0, 0, 0, -len);
+  translate(0, -len);
+  if (len > 4) {
+    push();
+    rotate(map(mouseX, 0, width, 0, PI/2));
+    branch(len * 0.7);
+    pop();
+    push();
+    rotate(-map(mouseX, 0, width, 0, PI/2));
+    branch(len * 0.7);
+    pop();
+  }
+}
+" />
+
+---
+
+## Referencia de API
+
+### `<P5Sketch />`
+
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `code` | `string` | **Sí** | El código JavaScript de p5.js. Se inyecta en un contexto global `with(p)`. |
+| `height` | `number` | `400` | Altura del contenedor del canvas en píxeles. |
+| `title` | `string` | `"p5.js Sketch"` | Texto que aparece en la barra superior del componente. |
+
+---
+
+## Cómo escribir un Sketch
+A diferencia de p5.js estándar en HTML, aquí el código se define dentro de un bloque de Markdown o una prop de React. No necesitas llamar a `new p5()`.
 
 ````mdx
-```p5 Título del sketch
+<P5Sketch title="Esfera" code={`
 function setup() {
-  createCanvas(600, 400);
+  createCanvas(600, 400, WEBGL);
 }
 function draw() {
   background(20);
-  fill(100, 200, 255);
-  circle(mouseX, mouseY, 50);
+  rotateX(frameCount * 0.01);
+  rotateY(frameCount * 0.01);
+  normalMaterial();
+  sphere(100);
 }
-```
+`} />
 ````
 
-> [!TIP]
-> El texto después de `p5` (en la misma línea) se convierte en el título del sketch.
-> Haz clic en **"Ver código"** para consultar o copiar el código fuente.
->
-> [!NOTE]
-> Todos los eventos p5 están disponibles: `mousePressed`, `keyPressed`, `mouseMoved`, `touchStarted`, etc.
+---
+
+## Mejores Prácticas
+- **Limpieza**: El componente destruye automáticamente la instancia de p5 (`p.remove()`) al desmontarse, evitando fugas de memoria.
+- **Responsividad**: Aunque `createCanvas` requiere medidas fijas, puedes usar `width: "100%"` en el contenedor y manejar el redimensionado dentro de `windowResized()`.
+- **RSC Friendly**: Este componente está marcado como `"use client"`, por lo que es compatible con Next.js App Router sin configuraciones adicionales.
 
 > [!WARNING]
-> Al renderizar P5 en la estructura SSG/SSR de Next.js V16/React 19, `fusiondoc` fuerza al componente P5Sketch a ser del lado cliente (`"use client"`). Evita importar utilidades de P5 por fuera del Canvas o se dispararán errores de ventana asíncrona (`window is not defined`).
+> Evita usar variables globales que choquen con nombres reservados de p5.js (ej: no nombres una variable `width` fuera de las funciones de ciclo de vida).

@@ -1,61 +1,67 @@
+# Terminal Interactiva (Terminal)
+
+El componente `<Terminal />` es una herramienta de narrativa técnica que simula una consola real con animaciones de escritura paso a paso. Proporciona una estética de alta fidelidad con controles de ventana, múltiples tipos de shell y disparadores de animación basados en el scroll.
+
+## Características
+- **Múltiples Shells**: Soporte nativo para `bash`, `zsh`, `powershell`, `cmd`, `node` y `python` con iconos y prompts específicos.
+- **Animación Inteligente**: La escritura se inicia automáticamente cuando el componente entra en el viewport del usuario.
+- **Controles Premium**: Incluye botones de ventana funcionales (decorativos) y un botón de reinicio para volver a ejecutar la secuencia.
+- **Feedback de Proceso**: Muestra un estado de "Proceso Finalizado" al completar la secuencia de comandos.
+
 ---
-title: Terminal
-description: Simula una terminal interactiva con animaciones de escritura paso a paso.
-order: 5
-icon: 'lucide:terminal'
+
+## Diseños de Alto Nivel
+
+### 1. Despliegue FullStack (Bash)
+Ideal para guías de inicio rápido que requieren clonar, instalar y ejecutar un proyecto.
+
+<Terminal 
+  title="Setup Inicial"
+  shell="bash"
+  staticText="Iniciando entorno de desarrollo..."
+  commands="git clone https://github.com/fusiondoc/starter.git\ncd starter\nnpm install\nnpm run dev"
+/>
+
+### 2. Flujo DevOps (PowerShell)
+Demuestra el uso de la terminal en entornos de infraestructura o despliegue en la nube.
+
+<Terminal 
+  title="Infraestructura Docker"
+  shell="powershell"
+  staticText="Levantando contenedores de base de datos..."
+  commands="docker-compose up -d\ndocker ps --format 'table {{.Names}}\t{{.Status}}'\ndocker logs fusion-db"
+/>
+
+### 3. REPL Interactivo (Node.js)
+Muestra cómo interactuar con lenguajes de programación directamente desde la consola.
+
+<Terminal 
+  title="Node.js Playground"
+  shell="node"
+  staticText="FusionDoc Runtime v1.0.0"
+  commands="const doc = new FusionDoc();\ndoc.initialize();\ndoc.render('index.md');"
+/>
+
 ---
 
-# Terminal
+## Referencia de API
 
-El componente `<Terminal />` es ideal para mostrar comandos, procesos de instalación o demostraciones de CLI con una estética realista y animada.
+### `<Terminal />`
 
-## Uso Básico
-
-Puedes usarlo para mostrar un comando simple. El componente simula la ejecución y puede mostrar una salida estática.
-
-<Terminal 
-  title="Instalación"
-  shell="bash"
-  commands="npm install @fusiondoc/core"
-  staticText="Instalando dependencias..."
-/>
-
-```mdx
-<Terminal 
-  title="Instalación"
-  shell="bash"
-  commands="npm install @fusiondoc/core"
-  staticText="Instalando dependencias..."
-/>
-```
-
-## Múltiples Comandos
-
-Puedes encadenar múltiples comandos separándolos por saltos de línea (`\n`).
-
-<Terminal 
-  title="Crear Proyecto"
-  shell="zsh"
-  commands="mkdir mi-doc\ncd mi-doc\nnpm init -y"
-/>
-
-```mdx
-<Terminal 
-  title="Crear Proyecto"
-  shell="zsh"
-  commands="mkdir mi-doc\ncd mi-doc\nnpm init -y"
-/>
-```
-
-## Propiedades
-
-| Propiedad | Tipo | Por defecto | Descripción |
+| Propiedad | Tipo | Defecto | Descripción |
 | :--- | :--- | :--- | :--- |
-| `title` | `string` | `"Terminal"` | El título que aparece en la barra superior de la terminal. |
-| `shell` | `string` | `"bash"` | El indicador de shell que se muestra (bash, zsh, powershell, etc.). |
-| `commands` | `string` | - | Los comandos a ejecutar, separados por `\n`. |
-| `staticText` | `string` | - | Texto de salida que aparece después de "ejecutar" los comandos. |
-| `isReadOnly` | `boolean` | `true` | Si se debe mostrar como una terminal interactiva o solo visual. |
+| `title` | `string` | Shell Name | Título que aparece en la barra superior del componente. |
+| `shell` | `string` | `bash` | Tipo de shell: `bash`, `zsh`, `powershell`, `cmd`, `node`, `python`. |
+| `commands` | `string` | - | Comandos a ejecutar. Usa `\n` para separar múltiples comandos. |
+| `commandList` | `string[]` | - | Alternativa a `commands` usando un array de strings. |
+| `staticText` | `string` | - | Comentario inicial que aparece en color tenue antes de los comandos. |
+
+---
+
+## Mejores Prácticas
+- **Concisión**: No pongas listas interminables de comandos; divide los procesos largos en varias terminales o usa el componente `Steps`.
+- **Contexto**: Usa `staticText` para describir qué está pasando ("Descargando activos...", "Verificando conexión...").
+- **Shell Correcto**: Asegúrate de usar `powershell` si tus ejemplos son específicos de Windows para mantener la fidelidad visual.
 
 > [!TIP]
-> Usa el componente Terminal para tus guías de "Primeros Pasos" para darles un toque extra de interactividad.
+> Puedes anidar el componente `Terminal` dentro de un `Step` para crear tutoriales técnicos ultra-profesionales que se sienten "vivos".

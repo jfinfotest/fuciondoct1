@@ -1,77 +1,63 @@
----
-title: Alertas
-description: >-
-  Componente para resaltar información importante con diferentes niveles de
-  severidad.
-order: 2
-icon: 'lucide:alert-triangle'
----
-
 # Alertas
 
-El componente `<Alert />` te permite mostrar mensajes importantes, advertencias, errores o notificaciones de éxito de manera visualmente atractiva y fácil de leer.
+El componente `Alert` es fundamental para comunicar estados, advertencias y consejos críticos de una manera que destaque del flujo normal del texto. No es solo un cuadro de color; es un ancla visual que guía al usuario en momentos clave de su navegación o configuración.
 
-## Uso Básico
+## Características
+- **Identidad Visual**: Cuatro variantes semánticas (`info`, `success`, `warning`, `error`) con iconos y colores coordinados.
+- **Soporte MDX Completo**: Puedes incluir listas, enlaces, código y negritas dentro de una alerta.
+- **Diseño Adaptativo**: Bordes suavizados y fondos semitransparentes que se integran perfectamente tanto en modo claro como oscuro.
 
-Puedes usar el componente pasando el contenido como hijo. Por defecto, la variante es `info`.
+---
 
-<Alert title="Nota Importante">
-  Este es un mensaje informativo básico para el usuario.
+## Ejemplos de Alto Impacto
+
+### 1. Aviso de Seguridad Proactivo
+Utiliza la variante `warning` para advertir sobre configuraciones que podrían comprometer el sistema si no se manejan con cuidado.
+
+<Alert variant="warning" title="Acceso a Credenciales Sensibles">
+  Nunca compartas tu archivo `.env.local` ni publiques el `GITHUB_TOKEN` en repositorios públicos.
+  
+  **Recomendaciones:**
+  - Añade `.env*` a tu archivo `.ignore`.
+  - Utiliza secretos de GitHub Actions para despliegues automatizados.
+  - Rota tus tokens cada 90 días para máxima seguridad.
 </Alert>
 
-```mdx
-<Alert title="Nota Importante">
-  Este es un mensaje informativo básico para el usuario.
-</Alert>
-```
+### 2. Diagnóstico de Error Crítico
+La variante `error` debe usarse cuando una acción no puede completarse, proporcionando detalles técnicos claros.
 
-## Variantes
-
-Existen 4 variantes disponibles que cambian el esquema de color y el icono automáticamente.
-
-### Éxito (Success)
-Usa esta variante para confirmar acciones realizadas correctamente.
-
-<Alert variant="success" title="¡Operación Exitosa!">
-  Los cambios se han guardado correctamente en el servidor.
+<Alert variant="error" title="Fallo en la Sincronización de Contenido">
+  No se pudo establecer conexión con el repositorio remoto. Esto suele ocurrir por:
+  
+  1. **Token Expirado**: Verifica la validez de tu PAT en la configuración de GitHub.
+  2. **Permisos Insuficientes**: Asegúrate de que el token tiene el scope `repo`.
+  3. **Límite de Rate Limit**: GitHub API ha limitado temporalmente tus peticiones.
+  
+  <div className="mt-2 font-mono text-[10px] opacity-70">
+    Error Code: 403_FORBIDDEN_API_LIMIT
+  </div>
 </Alert>
 
-```mdx
-<Alert variant="success" title="¡Operación Exitosa!">
-  Los cambios se han guardado correctamente en el servidor.
-</Alert>
-```
+### 3. Pro-Tip de Productividad
+Usa la variante `info` para sugerir mejores prácticas o atajos que mejoren la experiencia del usuario.
 
-### Advertencia (Warning)
-Ideal para avisos que requieren atención pero no son necesariamente errores críticos.
-
-<Alert variant="warning" title="Atención Requerida">
-  Tu suscripción vencerá en los próximos 3 días.
+<Alert variant="info" title="Truco de Editor: Edición Multi-línea">
+  Puedes editar múltiples líneas simultáneamente en el editor administrativo manteniendo pulsada la tecla `Alt` y haciendo clic en diferentes posiciones del texto.
+  
+  <div className="mt-1">
+    [Aprende más sobre atajos de teclado](/docs/FusionDoc/05-utilidades/kbd)
+  </div>
 </Alert>
 
-```mdx
-<Alert variant="warning" title="Atención Requerida">
-  Tu suscripción vencerá en los próximos 3 días.
-</Alert>
-```
+---
 
-### Error
-Úsalo para comunicar fallos críticos o errores de validación.
+## Referencia de API
 
-<Alert variant="error" title="Error de Conexión">
-  No se pudo establecer conexión con la base de datos.
-</Alert>
-
-```mdx
-<Alert variant="error" title="Error de Conexión">
-  No se pudo establecer conexión con la base de datos.
-</Alert>
-```
-
-## Propiedades
+### `<Alert />`
 
 | Propiedad | Tipo | Por defecto | Descripción |
 | :--- | :--- | :--- | :--- |
-| `variant` | string | `info` | El estilo visual y el icono (info, success, warning, error). |
-| `title` | string | - | Un encabezado opcional para la alerta. |
-| `children` | node | - | El contenido principal del mensaje. |
+| `variant` | `info` \| `success` \| `warning` \| `error` | `info` | Define el color, el icono y el tono emocional del mensaje. |
+| `title` | `string` | - | Un encabezado en negrita opcional que resume la alerta. |
+| `children` | `ReactNode` | - | El cuerpo del mensaje. Soporta cualquier componente o elemento MDX. |
+| `className` | `string` | - | Clases adicionales de CSS para ajustes finos de layout. |

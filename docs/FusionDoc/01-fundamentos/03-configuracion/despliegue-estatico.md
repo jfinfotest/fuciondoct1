@@ -5,15 +5,17 @@ order: 3
 icon: 'lucide:server'
 ---
 
-# Despliegue Estático Máximo (SSG)
+# Despliegue Estático y Modo Público
 
-La gran ventaja de la arquitectura híbrida de **FusionDoc en Next.js 16** es que todo este portal de documentación dinámico puede ser estáticamente pre-renderizado (SSG). Esto significa que no necesitas servidores costosos; puedes alojar tu documentación completamente gratis en servicios como **GitHub Pages, Vercel o Netlify**.
+La arquitectura híbrida de **FusionDoc** permite que este portal de documentación funcione con un consumo mínimo de recursos. Para lograr una experiencia similar a un sitio estático tradicional, hemos introducido el **Modo Público**.
 
-## Cómo funciona la exportación estática
+### 🌟 El Poder del Modo Público
+Al configurar `ENABLE_AUTH_DB=false` en tus variables de entorno, FusionDoc entra en un estado de **Zero-Dependencia**:
+- **Sin Base de Datos**: No se realizan consultas a Prisma ni a SQL.
+- **Acceso Abierto**: Se eliminan todos los controles de autenticación y grupos.
+- **Rápido como el Rayo**: El sistema sirve los Markdowns directamente desde GitHub o la caché local con latencia mínima.
 
-Por defecto, la función `generateStaticParams()` extrae todas las rutas disponibles de tus archivos markdown (los localizados en la carpeta `docs/` o aquellos servidos a través de la API de GitHub). 
-
-Luego, en tiempo de compilación (build-time), compilará cada uno de los archivos `.md/.mdx` al igual que sus componentes React en HTML/CSS plano y cargará el JS interactivo (Hydration) posteriormente.
+Esta configuración es la recomendada para desplegar en servicios como **Vercel, Railway o GitHub Pages**, donde se busca un portal informativo abierto al mundo.
 
 ### 1. Activar el Modo de Exportación en `next.config.ts`
 

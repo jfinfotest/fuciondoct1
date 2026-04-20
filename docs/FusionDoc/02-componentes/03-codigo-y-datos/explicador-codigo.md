@@ -1,227 +1,126 @@
+# Explicador de Código (CodeExplainer)
+
+El `CodeExplainer` es el componente insignia de FusionDoc para la enseñanza técnica. Permite realizar una "autopsia" interactiva del código, desglosando lógicas complejas mediante un sistema sincronizado de resaltado de líneas y narrativa lateral paso a paso.
+
+## Características
+- **Resaltado Dinámico**: Ilumina rangos de líneas (`1-5`), líneas individuales (`8`) o selecciones dispersas (`2,15,20`) con transiciones suaves.
+- **Soporte Multi-archivo**: Gestiona sistemas completos mediante pestañas integradas que mantienen su propio progreso de lectura.
+- **Foco Inteligente**: El panel de código se desplaza automáticamente para centrar las líneas resaltadas en cada paso.
+- **Modo Inmersivo**: Incluye un modo de pantalla completa para sesiones de estudio profundo sin distracciones.
+
 ---
-title: Explicador de Código (CodeExplainer)
-description: Un componente interactivo para desglosar y explicar bloques de código paso a paso mediante resaltado dinámico.
-icon: mdi:code-tags-check
----
 
-El componente `CodeExplainer` permite presentar fragmentos de código de manera interactiva. Muestra el código en el panel izquierdo y una serie de explicaciones paso a paso en el panel derecho. A medida que el usuario navega por las explicaciones, las líneas de código relevantes se resaltan automáticamente.
+## Diseños de Alto Nivel
 
-Ahora también soporta **múltiples archivos mediante pestañas**, permitiendo explicar sistemas de archivos completos en un solo componente.
-
-## Ejemplo de un solo archivo
-
-Aquí tienes un ejemplo de cómo se usa el componente interactivo para explicar un hook personalizado en React:
+### 1. Desglose de Lógica de Negocio (Backend)
+Analiza un middleware de autenticación complejo resaltando los puntos de decisión críticos.
 
 <CodeExplainer>
 
-```javascript
-import { useState, useEffect } from 'react';
+```typescript
+import { Request, Response, NextFunction } from 'express';
+import jwt from 'jsonwebtoken';
 
-function useWindowSize() {
-  const [windowSize, setWindowSize] = useState({
-    width: undefined,
-    height: undefined,
-  });
+export const authMiddleware = (req: Request, res: Response, next: NextFunction) => {
+  const token = req.headers.authorization?.split(' ')[1];
 
-  useEffect(() => {
-    function handleResize() {
-      setWindowSize({
-        width: window.innerWidth,
-        height: window.innerHeight,
-      });
-    }
-    
-    window.addEventListener("resize", handleResize);
-    handleResize();
-    
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+  if (!token) {
+    return res.status(401).json({ error: 'Acceso Denegado' });
+  }
 
-  return windowSize;
-}
+  try {
+    const verified = jwt.verify(token, process.env.JWT_SECRET!);
+    req.user = verified;
+    next();
+  } catch (err) {
+    res.status(400).json({ error: 'Token Inválido' });
+  }
+};
 ```
 
-<CodeExplainerStep lines="3">
-  **Declaración del Hook:** Comenzamos definiendo nuestro hook personalizado llamado `useWindowSize`.
+<CodeExplainerStep lines="5">
+  **Extracción de Token:** Utilizamos encadenamiento opcional para obtener el Bearer Token de los encabezados de autorización de la solicitud.
 </CodeExplainerStep>
 
-<CodeExplainerStep lines="4-7">
-  **Estado Inicial:** Utilizamos `useState` para guardar las dimensiones de la ventana. Inicializamos en `undefined` para evitar errores durante la hidratación rápida en frameworks como Next.js (SSR).
+<CodeExplainerStep lines="7-9">
+  **Validación de Existencia:** Si el token no está presente, cortamos el flujo inmediatamente con una respuesta 401 (Unauthorized).
 </CodeExplainerStep>
 
-<CodeExplainerStep lines="9,21">
-  **Efecto Secundario:** Usamos `useEffect` para enlazar la lógica al ciclo de vida del componente una vez que este se monta.
-</CodeExplainerStep>
-
-<CodeExplainerStep lines="23">
-  **Retorno:** Finalmente devolvemos el estado con las dimensiones calculadas para que cualquier componente pueda aprovecharlas.
+<CodeExplainerStep lines="11-16">
+  **Verificación Criptográfica:** Usamos la librería JWT para validar la firma. Si es exitosa, inyectamos la data del usuario en el objeto `req` para los siguientes middlewares.
 </CodeExplainerStep>
 
 </CodeExplainer>
 
-## Ejemplo Multi-archivo Completo
-
-A continuación, un ejemplo que desglosa un componente de tarjeta interactiva compuesto por tres archivos relacionados:
+### 2. Arquitectura de Componentes (Multi-Archivo)
+Explica la relación entre un componente React, sus estilos y su lógica de negocio.
 
 <CodeExplainer>
-  <CodeExplainerFile title="Card.jsx">
-    ```jsx
-    import React from 'react';
-    import './Card.css';
-
-    export const Card = ({ title, category, image }) => {
-      return (
-        <div className="card-container">
-          <div className="card-image">
-            <img src={image} alt={title} />
-            <span className="card-badge">{category}</span>
-          </div>
-          <div className="card-content">
-            <h3>{title}</h3>
-            <button className="card-btn">Ver más</button>
-          </div>
+  <CodeExplainerFile title="UserCard.tsx">
+    ```tsx
+    export const UserCard = ({ user }) => (
+      <div className="card-glass">
+        <Avatar src={user.avatar} />
+        <div className="info">
+          <h3>{user.name}</h3>
+          <p>{user.role}</p>
         </div>
-      );
-    };
+      </div>
+    );
     ```
-    <CodeExplainerStep lines="1-2">
-      **Importaciones:** Cargamos los módulos básicos de React y el archivo de estilos local.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="4">
-      **Parámetros (Props):** Desestructuramos las propiedades necesarias para alimentar la tarjeta dinámicamente.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="7-11">
-      **Layout de Imagen:** Definimos el contenedor de la imagen junto con una etiqueta de categoría superpuesta.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="13-14">
-      **Detalles:** Renderizamos el encabezado y el botón de acción principal del componente.
+    <CodeExplainerStep lines="2,4">
+      **Layout Visual:** Aplicamos la clase `card-glass` que define el efecto de desenfoque de fondo.
     </CodeExplainerStep>
   </CodeExplainerFile>
 
-  <CodeExplainerFile title="Card.css">
+  <CodeExplainerFile title="UserCard.css">
     ```css
-    .card-container {
-      border-radius: 12px;
-      overflow: hidden;
-      background: #1a1a1a;
-      transition: transform 0.3s ease;
-    }
-
-    .card-container:hover {
-      transform: translateY(-8px);
-    }
-
-    .card-image img {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-    }
-
-    .card-badge {
-      position: absolute;
-      top: 1rem;
-      background: var(--primary);
+    .card-glass {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 20px;
     }
     ```
     <CodeExplainerStep lines="1-6">
-      **Estructura Base:** Definimos el radio de borde y la transición para animaciones suaves.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="8-10">
-      **Interacción:** Agregamos una elevación visual (`translateY`) al interactuar con la tarjeta.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="12-16">
-      **Control de Imagen:** Aseguramos que la imagen ocupe todo el ancho y mantenga su proporción.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="18-22">
-      **Etiquetas Dinámicas:** Posicionamos el "badge" de forma absoluta usando el color primario del tema.
-    </CodeExplainerStep>
-  </CodeExplainerFile>
-
-  <CodeExplainerFile title="App.jsx">
-    ```jsx
-    import { Card } from './Card';
-
-    export default function App() {
-      return (
-        <div className="page-wrapper">
-          <nav className="navbar">Nav</nav>
-          <div className="grid">
-            <Card 
-              title="Producto A" 
-              category="Tech"
-              image="/a.jpg"
-            />
-          </div>
-          <footer className="footer" />
-        </div>
-      );
-    }
-    ```
-    <CodeExplainerStep lines="1">
-      **Registro:** Importamos el componente `Card` para poder instanciarlo en nuestra aplicación.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="5-6">
-      **Contenedores:** Envolvemos el contenido en un wrapper principal y añadimos una navegación básica.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="8-12">
-      **Componente Vivo:** Pasamos la metadata específica (título, categoría, ruta de imagen) a la tarjeta.
-    </CodeExplainerStep>
-    <CodeExplainerStep lines="14">
-      **Cierre:** Incluimos un pie de página para completar la estructura visual de la página.
+      **Efecto Glassmorphism:** La combinación de opacidad baja y `backdrop-filter` crea la sensación de cristal esmerilado premium.
     </CodeExplainerStep>
   </CodeExplainerFile>
 </CodeExplainer>
 
-## Uso en MDX
+---
 
-### Un solo archivo (Modo Legacy)
-Simplemente envuelve el bloque de código y los pasos:
+## Referencia de API
 
-````mdx
-<CodeExplainer>
-  ```javascript
-  function hello() { console.log("world"); }
-  ```
-  <CodeExplainerStep lines="1">Explicación</CodeExplainerStep>
-</CodeExplainer>
-````
+### `<CodeExplainer />`
+Contenedor principal con diseño de dos paneles.
 
-### Múltiples archivos
-Usa etiquetas `<CodeExplainerFile>` para cada pestaña:
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `children` | `ReactNode` | **Sí** | Debe incluir un bloque de código y componentes de Step/File. |
 
-````mdx
-<CodeExplainer>
-  <CodeExplainerFile title="index.js">
-    ```javascript
-    console.log("File 1");
-    ```
-    <CodeExplainerStep lines="1">Paso archivo 1</CodeExplainerStep>
-  </CodeExplainerFile>
+### `<CodeExplainerFile />`
+Define una pestaña de archivo dentro del explicador.
 
-  <CodeExplainerFile title="utils.js">
-    ```javascript
-    console.log("File 2");
-    ```
-    <CodeExplainerStep lines="1">Paso archivo 2</CodeExplainerStep>
-  </CodeExplainerFile>
-</CodeExplainer>
-````
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `title` | `string` | **Sí** | Nombre del archivo (ej: `auth.js`). |
 
-## Propiedades
+### `<CodeExplainerStep />`
+Define un punto de explicación con resaltado de líneas.
 
-### CodeExplainerFile
-| Prop | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `title` | `string` | El nombre que aparecerá en la pestaña del archivo. |
+| Propiedad | Tipo | Defecto | Descripción |
+| :--- | :--- | :--- | :--- |
+| `lines` | `string` | - | Rango(s) a iluminar. Ej: `1`, `3-8`, `12,15-18`. |
 
-### CodeExplainerStep
-| Prop | Tipo | Descripción |
-| :--- | :--- | :--- |
-| `lines` | `string` | Define las filas a resaltar (Ej. `"1"`, `"2-5"`, `"1,4,7-9"`). |
+---
 
 ## Mejores Prácticas
+- **Nivel de Detalle**: No expliques cada línea. Agrupa líneas que formen una "unidad de lógica" lógica.
+- **Micro-Copy**: Mantén las explicaciones laterales breves y directas. Si necesitas más espacio, usa listas o negritas.
+- **Orden Coherente**: Asegúrate de que los pasos sigan el flujo de ejecución lógica del código, no necesariamente el orden de arriba hacia abajo.
 
-- **Consistencia:** Si usas multi-archivo, intenta que todos los archivos tengan al menos un paso explicativo.
-- **Títulos cortos:** Mantén los títulos de los archivos breves para que las pestañas quepan bien en pantallas móviles.
-- **Navegación:** Recuerda que el progreso se guarda por archivo; si el usuario vuelve a una pestaña, estará en el paso donde lo dejó.
+> [!IMPORTANT]
+> El resaltado de líneas en `CodeExplainer` es visualmente distinto al resaltado estático de bloques de código. Está diseñado para guiar el ojo del usuario durante la lectura interactiva.
+vuelve a una pestaña, estará en el paso donde lo dejó.
 

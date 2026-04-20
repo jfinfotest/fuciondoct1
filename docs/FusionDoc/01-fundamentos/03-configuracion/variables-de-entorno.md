@@ -9,33 +9,33 @@ icon: 'lucide:variable'
 
 FusionDoc utiliza variables de entorno para configurar aspectos como el token de GitHub, la rama por defecto y el repositorio de origen.
 
-### ⚙️ Configuración General
+### ⚙️ Modos de Operación (Público vs Gestionado)
+
+FusionDoc puede operar en dos modos fundamentales controlados por estados de base de datos.
 
 <PropertyTable items="[
   {
-    name: 'NEXT_PUBLIC_SITE_URL',
-    type: 'string',
-    description: 'URL base en producción (ej. https://docs.tusitio.com) utilizada para sitemaps y metaetiquetas SEO.',
-    required: true
-  }
-]" />
-
-### 💻 Orígenes de Documentación (Local vs GitHub)
-
-Controla desde dónde FusionDoc lee los archivos Markdown de tu proyecto, permitiendo apagar GitHub e ingerir carpetas locales.
-
-<PropertyTable items="[
-  {
-    name: 'USE_LOCAL_DOCS',
+    name: 'ENABLE_AUTH_DB',
     type: 'boolean',
-    description: 'Bandera maestra. Si es true, Vercel o tu entorno Localhost forzarán la lectura de la carpeta interna `/docs` eliminando el soporte de GitHub. (Recomendado para Vercel).',
+    description: 'Cambia entre Modo Público (false) donde todo es abierto y no requiere DB, y Modo Gestionado (true) con Login y Panel de Control.',
     required: false
   },
   {
-    name: 'DOCKER_USE_LOCAL_VOLUMES',
-    type: 'boolean',
-    description: 'Bandera exclusiva para Contenedores Docker. Si es true, el contenedor consumirá los documentos montados por el volumen de Docker-Compose.',
+    name: 'DATABASE_PROVIDER',
+    type: 'string',
+    description: 'Motor de base de datos a utilizar (postgresql, sqlite, mysql). Crucial para el script de sincronización dinámica.',
     required: false
+  }
+]" />
+
+### 🗄️ Conexión de Base de Datos
+
+<PropertyTable items="[
+  {
+    name: 'DATABASE_URL',
+    type: 'string',
+    description: 'URL de conexión principal. Se utiliza tanto para la ejecución de la app como para las migraciones de esquema.',
+    required: true
   }
 ]" />
 
@@ -94,13 +94,13 @@ Configura la identidad visual de tu portal de documentación.
   {
     name: 'FOOTER',
     type: 'string',
-    description: 'Texto copyright o mensaje para el pie de página. Si está vacío, el footer no se muestra.',
+    description: 'Texto copyright o mensaje para el pie de página.',
     required: false
   },
   {
-    name: 'FOOTER_LINKS',
+    name: 'SOCIAL_LINKS',
     type: 'JSON',
-    description: 'Lista de enlaces con iconos para el footer en formato JSON.',
+    description: 'Lista de enlaces sociales con iconos para el Header (ej. GitHub, YouTube, Twitter).',
     required: false
   },
   {
@@ -123,13 +123,14 @@ Configura la identidad visual de tu portal de documentación.
   }
 ]" />
 
-#### Ejemplo de FOOTER_LINKS
-Para configurar iconos sociales o enlaces legales en el footer, usa el siguiente formato en tu `.env.local`:
+#### Ejemplo de SOCIAL_LINKS
+Para configurar iconos sociales en el header, usa el siguiente formato en tu `.env.local`:
 
 ```bash
-FOOTER_LINKS=[
+SOCIAL_LINKS=[
   {"name":"GitHub","url":"https://github.com/tu-usuario","icon":"mdi:github"},
-  {"name":"Twitter","url":"https://twitter.com/tu-cuenta","icon":"mdi:twitter"}
+  {"name":"Twitter","url":"https://twitter.com/tu-cuenta","icon":"mdi:twitter"},
+  {"name":"YouTube","url":"https://youtube.com","icon":"mdi:youtube"}
 ]
 ```
 
