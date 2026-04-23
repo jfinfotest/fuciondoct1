@@ -2,7 +2,7 @@
 title: Contenido del Curso
 description: Estructura de las 4 sesiones de Fundamentos de Kotlin para Android.
 icon: mdi:format-list-bulleted
-order: 1
+order: 99
 ---
 
 # Fundamentos de Kotlin
