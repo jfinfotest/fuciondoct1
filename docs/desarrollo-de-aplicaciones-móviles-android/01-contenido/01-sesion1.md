@@ -1,50 +1,50 @@
 ---
 title: "Sesión 1: El Salto a Kotlin (Sintaxis y Seguridad)"
-description: "Guía detallada sobre la interoperabilidad JVM, inmutabilidad, Null Safety y estructuras de control modernas en Kotlin."
+description: "Inmersión profunda en los fundamentos de Kotlin: desde interoperabilidad hasta seguridad de nulos extrema."
 icon: mdi:numeric-1-box-outline
 order: 1
 ---
 
-# Sesión 1: El Salto a Kotlin
+<Hero 
+  title="El Salto a Kotlin"
+  description="Domina la sintaxis moderna, la seguridad de tipos y la interoperabilidad total con la JVM en esta guía exhaustiva para desarrolladores Android."
+  icon="Zap"
+  variant="glass"
+  align="left"
+  actions={[
+    { label: "Ir a Práctica", href: "#practica", variant: "primary", icon: "Code2" }
+  ]}
+/>
 
-Kotlin no es solo un lenguaje "menos verboso" que Java; es un lenguaje diseñado para la **seguridad** y la **productividad**. En esta sesión, profundizaremos en los pilares que hacen de Kotlin el lenguaje preferido para Android.
+# Sesión 1: Fundamentos Críticos
+
+Kotlin ha revolucionado el ecosistema Android al priorizar la **seguridad del desarrollador** sin sacrificar el rendimiento. En esta sesión, exploraremos todas las variantes y posibilidades de los pilares del lenguaje.
 
 ---
 
-## 1. Introducción: Interoperabilidad y Configuración
+## 1. Interoperabilidad y JVM
 
-### Interoperabilidad con la JVM
-Kotlin está diseñado para ser **100% interoperable** con Java. Esto significa que puedes tener archivos Java y Kotlin coexistiendo en el mismo proyecto, y llamar a funciones de uno desde el otro sin problemas. 
+Kotlin no intenta reemplazar el ecosistema de Java, sino elevarlo. 
 
-*   **JVM (Java Virtual Machine):** Kotlin se compila a Bytecode de Java, lo que permite que se ejecute en cualquier lugar donde Java lo haga.
-*   **Ecosistema:** Puedes usar todas las librerías de Java existentes (como Retrofit, Glide, Room) de forma nativa en Kotlin.
-
-### Configuración de IntelliJ / Android Studio
-Para comenzar, solo necesitas instalar el IDE oficial. Kotlin viene integrado por defecto.
-
-<Steps>
-  <Step title="Instalación del IDE">
-    Descarga e instala **Android Studio** (recomendado para apps) o **IntelliJ IDEA** (para scripts y backend).
-  </Step>
-  <Step title="Creación del Proyecto">
-    Al crear un nuevo proyecto, asegúrate de seleccionar **Kotlin** como el lenguaje principal.
-  </Step>
-</Steps>
+### Variantes de Compilación
+*   **Kotlin/JVM:** El estándar para Android y Backend.
+*   **Kotlin/JS:** Transpila a JavaScript para desarrollo Web.
+*   **Kotlin/Native:** Compila a binarios nativos (iOS, Windows, Linux) sin JVM.
 
 <CodeTabs>
-  <CodeTab title="Kotlin" icon="vscode-icons:file-type-kotlin">
+  <CodeTab title="Llamando Java desde Kotlin" icon="vscode-icons:file-type-java">
     ```kotlin
-    fun main() {
-        println("Hola desde Kotlin!")
-    }
+    // Kotlin puede usar clases Java sin configuración extra
+    val calendar = java.util.Calendar.getInstance()
+    println(calendar.time)
     ```
   </CodeTab>
-  <CodeTab title="Java" icon="vscode-icons:file-type-java">
-    ```java
-    public class Main {
-        public static void main(String[] args) {
-            System.out.println("Hola desde Java!");
-        }
+  <CodeTab title="Anotaciones de Interop" icon="mdi:xml">
+    ```kotlin
+    // @JvmStatic permite que Java vea un método de un object como estático
+    object Utils {
+        @JvmStatic
+        fun limpiarCache() { ... }
     }
     ```
   </CodeTab>
@@ -52,120 +52,144 @@ Para comenzar, solo necesitas instalar el IDE oficial. Kotlin viene integrado po
 
 ---
 
-## 2. Variables: val vs var e Inmutabilidad
+## 2. Variables: El Espectro de la Mutabilidad
 
-En Kotlin, la declaración de variables se centra en la intención del programador sobre la mutabilidad de los datos.
+La declaración de variables en Kotlin es rica en variantes según el ciclo de vida y la necesidad de memoria.
 
-### La Importancia de la Inmutabilidad
-En el desarrollo de aplicaciones Android, la inmutabilidad ayuda a prevenir errores comunes en hilos (threads) y hace que el estado de la aplicación sea predecible.
+### val vs var
+*   **`val`**: Referencia inmutable. Se asigna una vez.
+*   **`var`**: Referencia mutable. Puede reasignarse.
 
-*   **`val` (Value):** Referencia inmutable. Una vez asignado el valor, no puede cambiar. Es equivalente a `final` en Java. **Úsalo por defecto.**
-*   **`var` (Variable):** Referencia mutable. Puede ser reasignada en cualquier momento.
+### Inicialización Diferida
+A veces no tenemos el valor al momento de declarar la variable (muy común en Android con las Vistas).
 
 <CodeTabs>
-  <CodeTab title="Asignaciones" icon="mdi:code-tags">
+  <CodeTab title="Tipos de Declaración" icon="mdi:variable">
     ```kotlin
+    // 1. Inferencia de tipo (Recomendado)
     val nombre = "Kotlin" 
-    // nombre = "Java" // [!code error] // ❌ Error: Val cannot be reassigned
 
-    var version = 1.9
-    version = 2.0 // ✅ Correcto: Var puede cambiar
+    // 2. Tipo explícito
+    val version: Double = 1.9 
+
+    // 3. Constantes de tiempo de compilación (Solo en top-level o objects)
+    const val API_KEY = "XYZ123" 
     ```
   </CodeTab>
-  <CodeTab title="¿Por qué val?" icon="mdi:help-circle">
+  <CodeTab title="lateinit vs lazy" icon="mdi:clock-outline">
     ```kotlin
-    // Al usar val, garantizas que este objeto no cambiará 
-    // accidentalmente durante la ejecución de una función compleja.
-    val configuracionBase = APIConfig("https://api.com")
+    // lateinit: Para variables mutables que se inicializan luego (ej: onCreate)
+    lateinit var boton: Button 
+
+    // lazy: El valor se calcula solo cuando se accede por primera vez (Solo para val)
+    val baseDeDatos by lazy {
+        println("Conectando...")
+        DatabaseConnection()
+    }
     ```
   </CodeTab>
 </CodeTabs>
 
 ---
 
-## 3. Null Safety: El Fin del Billón de Dólares
+## 3. Null Safety: Variaciones de Seguridad
 
-El error más común en Java es el `NullPointerException`. Kotlin soluciona esto integrando la nulidad directamente en el sistema de tipos.
+Kotlin ofrece múltiples formas de manejar la ausencia de valor, adaptándose a cada flujo lógico.
 
-### Tipos Nulos (?)
-Por defecto, ninguna variable en Kotlin puede ser nula. Para permitirlo, debes marcar el tipo con un signo de interrogación.
+### El Operador de Llamada Segura (`?.`)
+Evita el crash devolviendo `null` si el objeto es nulo.
+
+### El Operador Elvis (`?:`)
+Proporciona un valor por defecto ("Si es nulo, entonces...").
+
+### Smart Casts
+El compilador es lo suficientemente inteligente como para saber que, después de un check de nulidad, la variable es segura.
 
 <CodeTabs>
-  <CodeTab title="Definición de Tipos" icon="vscode-icons:file-type-kotlin">
+  <CodeTab title="Manejo de Nulos" icon="mdi:shield-check">
     ```kotlin
-    var obligatorio: String = "No puedo ser nulo"
-    // obligatorio = null // ❌ Error de compilación
+    val user: String? = obtenerUsuario()
 
-    var opcional: String? = "Puedo ser nulo"
-    opcional = null // ✅ Correcto
+    // 1. Safe Call con let (Ejecuta el bloque solo si NO es nulo)
+    user?.let {
+        println("Bienvenido, $it")
+    }
+
+    // 2. Smart Cast automático
+    if (user != null) {
+        println(user.length) // No necesita '?' aquí, el compilador sabe que es seguro
+    }
     ```
   </CodeTab>
-  <CodeTab title="Safe Calls & Elvis" icon="mdi:flash">
+  <CodeTab title="Listas y Nulos" icon="mdi:format-list-bulleted">
     ```kotlin
-    val longitud: Int = opcional?.length ?: 0
-    
-    // Explicación:
-    // 1. opcional?.length -> Si 'opcional' es nulo, devuelve nulo. Si no, su longitud.
-    // 2. ?: 0 -> Si el resultado de la izquierda es nulo, usa '0'.
+    // Lista que puede contener nulos
+    val listaConNulos: List<String?> = listOf("A", null, "C")
+
+    // Filtrar nulos automáticamente
+    val listaLimpia: List<String> = listaConNulos.filterNotNull()
     ```
   </CodeTab>
 </CodeTabs>
 
-> [!CAUTION]
-> Evita usar el operador `!!` (Not-null assertion). Este operador fuerza al compilador a tratar una variable como no nula, pero si realmente es nula, lanzará una excepción inmediatamente.
-
 ---
 
-## 4. Control de Flujo Moderno
+## 4. Control de Flujo: Potencia Expresiva
+
+Kotlin transforma las estructuras tradicionales en herramientas de retorno de datos.
 
 ### if como Expresión
-A diferencia de Java, en Kotlin `if` es una expresión, lo que significa que puede devolver un valor directamente.
+Ideal para asignaciones condicionales rápidas.
 
-### El Poder de `when`
-Es el sustituto de `switch`, pero mucho más flexible. Puede evaluar rangos, tipos y múltiples condiciones sin necesidad de `break`.
+### when: El Switch con Esteroides
+Puede usarse con argumentos o como un reemplazo elegante para múltiples `if-else`.
 
 <CodeTabs>
-  <CodeTab title="If como Expresión" icon="mdi:code-braces">
+  <CodeTab title="Variantes de when" icon="mdi:swap-horizontal">
     ```kotlin
-    val edad = 20
-    val mensaje = if (edad >= 18) "Adulto" else "Menor"
-    // No necesitas una variable temporal ni múltiples returns.
-    ```
-  </CodeTab>
-  <CodeTab title="Estructura when" icon="mdi:function-variant">
-    ```kotlin
-    val nota = 85
-    when (nota) {
-        in 90..100 -> println("Sobresaliente")
-        in 70..89 -> println("Aprobado")
-        in 0..69 -> println("Reprobado")
-        else -> println("Nota inválida")
-    }
-    ```
-  </CodeTab>
-  <CodeTab title="Rangos (1..10)" icon="mdi:numeric">
-    ```kotlin
-    // Iteración simple
-    for (i in 1..5) {
-        print(i) // 12345
+    // 1. Con argumento y rangos
+    when (puntos) {
+        0 -> println("Sin puntos")
+        in 1..10 -> println("Bajo")
+        is Int -> println("Es un entero")
+        else -> println("Desconocido")
     }
 
-    // Verificación de pertenencia
-    val x = 5
-    if (x in 1..10) {
-        println("Está en el rango")
+    // 2. Sin argumento (Funciona como if-else anidado)
+    when {
+        puntos > 100 -> println("Record!")
+        puntos == 0 -> println("Cero")
     }
+    ```
+  </CodeTab>
+  <CodeTab title="Bucles y Rangos" icon="mdi:repeat">
+    ```kotlin
+    // Rango inclusivo
+    for (i in 1..5) { print(i) } // 1, 2, 3, 4, 5
+
+    // Hasta (excluye el último)
+    for (i in 1 until 5) { print(i) } // 1, 2, 3, 4
+
+    // Hacia atrás con pasos
+    for (i in 10 downTo 0 step 2) { print(i) } // 10, 8, 6, 4, 2, 0
     ```
   </CodeTab>
 </CodeTabs>
 
 ---
 
-## 🛠️ Práctica de la Sesión
-**Reto Final:** Crea un sistema de validación de perfil.
-1. Declara una variable `val usuario: String?` que pueda ser nula.
-2. Usa un bloque `when` para verificar una variable `puntos`. Si está entre `1..100` es "Principiante", si es mayor a `100` es "Pro".
-3. Imprime un mensaje final usando interpolación de strings: `"Usuario: ${usuario ?: "Anónimo"} - Rango: $rango"`.
+<span id="practica"></span>
+## 🛠️ Práctica: Validador de Sistema Pro
 
-> [!TIP]
-> La interpolación de strings se hace con el símbolo `$`. Si necesitas ejecutar lógica dentro del string, usa `${...}`.
+Diseña un script que simule la carga de un perfil de usuario siguiendo estas reglas:
+
+1.  Usa `lateinit` para una variable `perfilNombre`.
+2.  Usa `by lazy` para una variable `configuracionPesada`.
+3.  Crea una función que reciba un `Int?` y use `when` para retornar un string indicando el nivel de batería:
+    *   `null` -> "Desconocido"
+    *   `0..15` -> "Crítico" (Usa una alerta de FusionDoc aquí)
+    *   `16..100` -> "Normal"
+4.  Implementa un bucle que recorra un rango de `10 until 0` (hacia atrás) simulando una cuenta regresiva.
+
+> [!IMPORTANT]
+> La combinación de `lateinit` y `by lazy` es fundamental en Android para evitar que la aplicación consuma memoria innecesaria al inicio o que las variables sean nulas cuando el sistema intenta acceder a las vistas.
